@@ -192,4 +192,8 @@ class DB {
     {
         return self::table($table)->select()->order_by($order)->limit($limit);
     }
+    public function get_all(string $table)
+    {
+        return DB::table($table)->select()->all();
+    }
 }

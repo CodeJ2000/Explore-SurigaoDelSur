@@ -1,6 +1,7 @@
 <?php
   include "config/init.php";
   include "partials/header.php";
+
 ?>
 <div class="container-fluid bg-primary py-5 mb-5 hero-header">
     <div class="container py-5">
@@ -27,7 +28,12 @@
         </div>
         <div id="destination-container" class="row g-4 justify-content-center">
             <!-- This loop is for displaying all data from destination table -->
-            <?php foreach($data = Destination::action()->get_all() as $d): 
+            <?php if(empty($data = Destination::action()->get_all("destination"))): ?>
+            <div class="text-center border rounded p-5">
+                <h3 class="text-muted">Nothing to display!</h3>
+            </div>
+            <?php else : ?>
+            <?php foreach($data = Destination::action()->get_all("destination") as $d): 
                     $cat_id = $d->cat_id;
                     $category = Category::action()->get_by_id_category($cat_id);
                     $gallery = Gallery::action()->get_by_touristId_gallery($d->id);                
@@ -35,7 +41,7 @@
             <div class="col-lg-4 col-md-6 wow" data-wow-delay="0.1s">
                 <div class="package-item">
                     <div class="overflow-hidden card-img">
-                        <img class="img-fluid" src="<?=$gallery[0]->image1;?>" alt="" />
+                        <img class="img-fluid" src="img/tourist-spot/<?=$gallery[0]->image1;?>" alt="" />
                     </div>
                     <div class="d-flex border-bottom">
                         <small class="flex-fill text-center border-end py-2"><i
@@ -62,6 +68,7 @@
                 </div>
             </div>
             <?php endforeach;?>
+            <?php endif; ?>
         </div>
     </div>
 </div>

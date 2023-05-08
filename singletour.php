@@ -3,24 +3,6 @@
   include "partials/header.php";
 //This is for displaying single data from destination database table.
 $data = Destination::action()->get_by_id_destination($_GET['id']);
-
-// $gallery = Gallery::action()->get_by_tourist(1);
-// if($gallery){
-//     echo "success";
-// } else {
-//      echo "failed";
-// }
-
-// $substring = str_replace("get_by_", "", $string);
-// $arr = explode("_", $substring);
-// dd($arr);
-// echo $arr[0];
-// echo "<br>";
-// echo $arr[1];
-// $url = "https://www.youtube.com/watch?v=4ClIbE7s_wI";
-// $pattern = "/^.*(youtu.be\/|v\/|e\/|u\/\w+\/|embed\/|v=)([^#\&\?]*).*/";
-// preg_match($pattern, $url, $url_matches);
-// $v = $url_matches[2];
 ?>
 
 <div class="container-fluid bg-primary py-5 mb-5 hero-header"></div>
@@ -84,7 +66,8 @@ $data = Destination::action()->get_by_id_destination($_GET['id']);
                     <div class="card-body">
                         <div class="ratio ratio-16x9">
                             <iframe width="853" height="480"
-                                src="https://www.youtube.com/embed/<?=$data[0]->youtube_url;?>" frameborder="0"
+                                src="https://www.youtube.com/embed/<?=isYoutubeVideoLink($data[0]->youtube_url);?>"
+                                frameborder="0"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                 allowfullscreen></iframe>
                         </div>
@@ -147,19 +130,22 @@ $data = Destination::action()->get_by_id_destination($_GET['id']);
                                 <?php $gallery = Gallery::action()->get_by_touristId_gallery($data[0]->id);?>
                                 <div class="col-lg-12 col-md-12 wow zoomIn" data-wow-delay="0.1s">
                                     <div class="position-relative d-block overflow-hidden" href="">
-                                        <img class="img-fluid" src="<?=$gallery[0]->image1;?>" alt="" />
+                                        <img class="img-fluid" src="img/tourist-spot/<?=$gallery[0]->image1;?>"
+                                            alt="" />
 
 
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-md-12 wow zoomIn" data-wow-delay="0.3s">
                                     <div class="position-relative d-block overflow-hidden" href="">
-                                        <img class="img-fluid" src="<?=$gallery[0]->image2;?>" alt="" />
+                                        <img class="img-fluid" src="img/tourist-spot/<?=$gallery[0]->image2;?>"
+                                            alt="" />
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-md-12 wow zoomIn" data-wow-delay="0.5s">
                                     <div class="position-relative d-block overflow-hidden" href="">
-                                        <img class="img-fluid" src="<?=$gallery[0]->image3;?>" alt="" />
+                                        <img class="img-fluid" src="img/tourist-spot/<?=$gallery[0]->image3;?>"
+                                            alt="" />
 
                                     </div>
                                 </div>
@@ -167,8 +153,8 @@ $data = Destination::action()->get_by_id_destination($_GET['id']);
                         </div>
                         <div class="col-lg-5 col-md-6 wow zoomIn" data-wow-delay="0.7s" style="min-height: 350px">
                             <div class="position-relative d-block h-100 overflow-hidden" href="">
-                                <img class="img-fluid position-absolute w-100 h-100" src="<?=$gallery[0]->image4;?>"
-                                    alt="" style="object-fit: cover" />
+                                <img class="img-fluid position-absolute w-100 h-100"
+                                    src="img/tourist-spot/<?=$gallery[0]->image4;?>" alt="" style="object-fit: cover" />
                             </div>
                         </div>
                     </div>

@@ -81,16 +81,20 @@
         </div>
         <div class="row g-4 justify-content-center">
             <!-- This loop is going loop the data randomly and limit the data to 3 -->
+            <?php if(empty($data = Destination::action()->get_all("destination"))): ?>
+            <div class="text-center border rounded p-5">
+                <h3 class="text-muted">Nothing to display!</h3>
+            </div>
+            <?php else: ?>
             <?php foreach($data = Destination::action()->get_order_by("destination", "RAND()", 3) as $d) :
                   $cat_id = $d->cat_id;
                   $category = Category::action()->get_by_id_category($cat_id);
-                  $gallery = Gallery::action()->get_by_touristId($d->id);
-                  pr($gallery);
+                  $gallery = Gallery::action()->get_by_touristId_gallery($d->id);
               ?>
             <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                 <div class="package-item">
                     <div class="overflow-hidden card-img">
-                        <img class="img-fluid" src="<?=$gallery[0]->image1;?>" alt="" />
+                        <img class="img-fluid" src="img/tourist-spot/<?=$gallery[0]->image1;?>" alt="" />
                     </div>
                     <div class="d-flex border-bottom">
                         <small class="flex-fill text-center border-end py-2"><i
@@ -118,6 +122,7 @@
                 </div>
             </div>
             <?php endforeach; ?>
+            <?php endif; ?>
             <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
                 <a class="btn btn-primary py-3 px-5 mt-2" href="destination.php">See More</a>
             </div>
@@ -136,17 +141,22 @@
             <h1 class="mb-5">Satisfied Tourists</h1>
         </div>
         <div class="row g-3">
+            <?php  
+              ?>
+            <?php if(empty(Gallery::action()->get_all("gallery"))): ?>
+            <div class="text-center border rounded p-5">
+                <h3 class="text-muted">Nothing to display!</h3>
+            </div>
+            <?php else: 
+              $gallery = Gallery::action()->get_order_by("gallery", "RAND()", 1);  
+              $destination = Destination::action()->get_by_id_destination($gallery[0]->touristId);
+            ?>
             <div class="col-lg-7 col-md-6">
                 <div class="row g-3">
-                    <?php  
-                    $gallery = Gallery::action()->select();  
-                    $destination = Destination::action()->get_by_id_destination($gallery[0]->touristId);
-                    ?>
-
                     <div class="col-lg-12 col-md-12 wow zoomIn" data-wow-delay="0.1s">
                         <a class="position-relative d-block overflow-hidden"
                             href="singletour.php?id=<?=$destination[0]->id;?>">
-                            <img class="img-fluid" src="<?=$gallery[0]->image1;?>" alt="" />
+                            <img class="img-fluid" src="img/tourist-spot/<?=$gallery[0]->image1;?>" alt="" />
 
                             <div class="bg-white text-primary fw-bold position-absolute bottom-0 end-0 m-3 py-1 px-2">
                                 <?=$destination[0]->name;?>
@@ -156,7 +166,7 @@
                     <div class="col-lg-6 col-md-12 wow zoomIn" data-wow-delay="0.3s">
                         <a class="position-relative d-block overflow-hidden"
                             href="singletour.php?id=<?=$destination[0]->id;?>">
-                            <img class="img-fluid" src="<?=$gallery[0]->image2;?>" alt="" />
+                            <img class="img-fluid" src="img/tourist-spot/<?=$gallery[0]->image2;?>" alt="" />
                             <div class="bg-white text-primary fw-bold position-absolute bottom-0 end-0 m-3 py-1 px-2">
                                 <?=$destination[0]->name;?>
                             </div>
@@ -165,7 +175,7 @@
                     <div class="col-lg-6 col-md-12 wow zoomIn" data-wow-delay="0.5s">
                         <a class="position-relative d-block overflow-hidden"
                             href="singletour.php?id=<?=$destination[0]->id;?>">
-                            <img class="img-fluid" src="<?=$gallery[0]->image3;?>" alt="" />
+                            <img class="img-fluid" src="img/tourist-spot/<?=$gallery[0]->image3;?>" alt="" />
 
                             <div class="bg-white text-primary fw-bold position-absolute bottom-0 end-0 m-3 py-1 px-2">
                                 <?=$destination[0]->name;?>
@@ -177,13 +187,14 @@
             <div class="col-lg-5 col-md-6 wow zoomIn" data-wow-delay="0.7s" style="min-height: 350px">
                 <a class="position-relative d-block h-100 overflow-hidden"
                     href="singletour.php?id=<?=$destination[0]->id;?>">
-                    <img class="img-fluid position-absolute w-100 h-100" src="<?=$gallery[0]->image4;?>" alt=""
-                        style="object-fit: cover" />
+                    <img class="img-fluid position-absolute w-100 h-100"
+                        src="img/tourist-spot/<?=$gallery[0]->image4;?>" alt="" style="object-fit: cover" />
                     <div class="bg-white text-primary fw-bold position-absolute bottom-0 end-0 m-3 py-1 px-2">
                         <?=$destination[0]->name;?>
                     </div>
                 </a>
             </div>
+            <?php endif; ?>
         </div>
     </div>
 </div>

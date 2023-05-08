@@ -63,6 +63,8 @@ class Gallery extends DB{
                 $isValid = false;
             }
         }
+        pr($image_tmp);
+        pr($images);
         // If all files are valid, proceed with storing them in the database
         if ($isValid) {
             // Move the uploaded files to the desired location and insert their paths into the database

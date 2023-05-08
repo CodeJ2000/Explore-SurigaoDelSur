@@ -30,7 +30,7 @@ class Destination extends DB {
         $arr['barangay'] = sanitize_input($POST['barangay']);
         $arr['city_mun'] = sanitize_input($POST['city_mun']);
         $arr['guides'] = sanitize_input($POST['guides']);
-        $arr['youtube_url'] = sanitize_input($POST['yt_link']);
+        $arr['youtube_url'] = $POST['yt_link'];
         $arr['date_posted'] = date('Y-m-d H:i:s');
         //Check if youtube_url empty
         if(empty($arr['youtube_url'])){
@@ -87,9 +87,6 @@ class Destination extends DB {
     }
     
     //This function will return all data from the database table destination/
-    public function get_all()
-    {
-        return DB::table("destination")->select()->all();
-    }
+    
 }
 ?>
