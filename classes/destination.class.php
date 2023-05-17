@@ -22,6 +22,7 @@ class Destination extends DB {
         $errors = array();
         //Regular expression pattern for matching the data if a youtube or not.
         $pattern = '/^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[a-zA-Z0-9_-]{11}/i';
+        if(!empty($POST)){
         //Store the data into the array $arr.
         $arr['name'] = sanitize_input($POST['name']);
         $arr['description'] = sanitize_input($POST['description']);
@@ -82,6 +83,7 @@ class Destination extends DB {
             return self::$con->lastInsertId();
             
         }
+    }
         //If the $errors is not equal to zero , return the $errors so it can render into the form.
         return $errors;
     }

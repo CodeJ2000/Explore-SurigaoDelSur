@@ -19,6 +19,7 @@ class Gallery extends DB{
         $errors = array();//storage of the errors check.
         $images = array();//storage of the file name of the images
         $image_tmp =array();//storage of the tmp name file of the images.
+        
         //Loop the the array for insert the file details.
         for ($i = 1; $i <= 4; $i++) {
             //Check if the $_FILES['image']['name'] is set and error is equal to zero before to proceed 
@@ -58,13 +59,11 @@ class Gallery extends DB{
                     $isValid = false;
                 }
                 //Check if the input field of files is empty, if it is empty the error will be equal to 4 and add the message into the $errors array.
-            } elseif ($_FILES['image' . $i]['error'] === 4) {
+            } elseif (isset($_FILES['image' . $i]['name']) && $_FILES['image' . $i]['error'] === 4) {
                 $errors[] = "Destination image " . $i . " is required.";
                 $isValid = false;
             }
         }
-        pr($image_tmp);
-        pr($images);
         // If all files are valid, proceed with storing them in the database
         if ($isValid) {
             // Move the uploaded files to the desired location and insert their paths into the database
@@ -83,51 +82,6 @@ class Gallery extends DB{
            return $errors;
         }
     }
-    // public function create()
-    // {
-    //     $errors = array();
-    //     $isValid = true;
-    
-    //     for ($i = 1; $i <= 4; $i++) {
-    //         if (isset($_FILES['image' . $i]['name'])) {
-    //             $image = $_FILES['image' . $i]['name'];
-    //             $imageTmp = $_FILES['image' . $i]['tmp_name'];
-    
-    //             if ($imageTmp && $imageTmp != ''g) {
-    //                 $images_check = getimagesize($imageTmp);
-    //                 if ($images_check === false) {
-    //                     $errors[] = "File must be an image with the extension of .jpg or .png";
-    //                     $isValid = false;
-    //                 } else {
-    //                     $extension = pathinfo($image, PATHINFO_EXTENSION);
-    //                     if (!in_array(strtolower($extension), ['jpg', 'png'])) {
-    //                         $errors[] = "Invalid file extension. Only .jpg and .png files are allowed.";
-    //                         $isValid = false;
-    //                     } else {
-    //                         // Move the uploaded file to the desired location
-    //                         $unicode = uniqid();
-    //                         $destination = $unicode . "_" . $i . "." . $extension;
-    //                         if (move_uploaded_file($imageTmp, "../img/tourist-spot/" .$destination)) {
-    //                             // File moved successfully, save the file path in the database
-    //                             $arr["image" . $i] = $destination;
-    //                         } else {
-    //                             $errors[] = "Failed to move the uploaded file.";
-    //                             $isValid = false;
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-    
-    //     if ($isValid) {
-    //         // Insert $arr into the database
-    //         DB::table("gallery")->insert($arr);
-    //         unset($_SESSION['destination_id']);
-    //     }
-    
-    //     return $errors;
-    // }
     
 
     public function select()

@@ -3,7 +3,24 @@
   require_once "../config/init.php";
   include "admin-partials/side-nav.php";
   include "admin-partials/topbar.php";
-  //Return the data that user filled if the user fill some data so that it will not clear the form.
+?>
+<?php
+if(isset($_GET['update'])){
+    $update_id = sanitize_input($_GET['update']);
+    $get_data = Destination::action()->get_by_id_destination($update_id);
+    $get_cat = Destination::action()->get_by_id_category($get_data[0]->cat_id);
+    if(!empty($get_data)){
+        $touristspot_name = $get_data[0]->name;
+        $description = $get_data[0]->description;
+        $purok = $get_data[0]->purok;
+        $guides = $get_data[0]->guides;
+        $category = $get_cat[0]->name;
+        $barangay = $get_data[0]->barangay;
+        $city_mun = $get_data[0]->city_mun;
+        $yt_link = $get_data[0]->youtube_url;
+    }
+} else {
+//Return the data that user filled if the user fill some data so that it will not clear the form.
   $touristspot_name = $_POST['name'] ?? "";
   $description = $_POST['description'] ?? ""; 
   $purok = $_POST['purok'] ?? ""; 
@@ -12,10 +29,11 @@
   $barangay = $_POST['barangay'] ?? ""; 
   $city_mun = $_POST['city_mun'] ?? "";
   $yt_link = $_POST['yt_link'] ?? "";
-  //default set boolean to true for checking
   $check = true;
+}
+
   //Check if the $_POST is more than 0.
-  if(count($_POST) > 0){
+  if($_POST > 0){
       //insert the data into the databse table destination if not success it will return the $errors array for error messag.e
       $errors = Destination::action()->create($_POST);
       //check if $errors is not returning an array, if so ,store the array data into the session call destination_id
@@ -44,7 +62,7 @@
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">
-            Add tourist spot record
+            <?=((isset($_GET['update'])) ? "Update" : "Add");?> tourist spot record
         </h1>
     </div>
     <div>
@@ -54,7 +72,7 @@
                     $errors = array_merge($errors, $errors2);
                 }
                 //Check if $errors is set and if its an array, then if is true, echo the error message.
-                if(isset($errors) && is_array($errors)){
+                if(isset($errors) && is_array($errors) && !empty($errors)){
                     err_message($errors);
                 }
             ?>
@@ -114,6 +132,24 @@
                         <input name="image4" value="" type="file" class="form-control" id="validationDefault01" />
                     </div>
                 </div>
+                <?php if(isset($_GET['update'])): ?>
+                <div class="row">
+                    <div class="col-md-3 p-2">
+                        <img style="width:100%;" src="../img/tourist-spot/<?=$gallery[0]->image1;?>" alt="">
+                    </div>
+                    <div class="col-md-3 p-2">
+                        <img style="width:100%;" src="../img/tourist-spot/<?=$gallery[0]->image1;?>" alt="">
+
+                    </div>
+                    <div class="col-md-3 p-2">
+                        <img style="width:100%;" src="../img/tourist-spot/<?=$gallery[0]->image1;?>" alt="">
+
+                    </div>
+                    <div class="col-md-3 p-2">
+                        <img style="width:100%;" src="../img/tourist-spot/<?=$gallery[0]->image1;?>" alt="">
+                    </div>
+                </div>
+                <?php endif; ?>
                 <div class="row">
                     <div class="col-md-4">
                         <label for="validationDefault01" class="form-label">Youtube link:</label>
@@ -123,9 +159,11 @@
                     <div class="form-group col-md-3">
                         <label for="validationDefault04" class="form-label">Category</label>
                         <select name="category" class="form-control form-select" id="validationDefault04">
-                            <option <?=((empty($category)) ? 'selected' : '');?> value="">Choose...</option>
+                            <option <?=((empty($category_id)) ? 'selected' : '');?> value="">Choose...</option>
                             <?php foreach($cat = Category::action()->select()->all() as $c): ?>
-                            <option <?=(($category == $c->id)? 'selected' : '');?> value="<?=$c->id;?>"><?=$c->name;?>
+                            <option <?=((isset($_GET['update']) && $category_id == $c->id)? 'selected' : '');?>
+                                value="<?=$c->id;?>">
+                                <?=$c->name;?>
                             </option>
                             <?php endforeach; ?>
                         </select>

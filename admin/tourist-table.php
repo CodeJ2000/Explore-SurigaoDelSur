@@ -15,6 +15,11 @@
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">DataTables</h6>
         </div>
+        <?php if(empty($destination = Destination::action()->get_all("destination"))): ?>
+        <div class="text-center border rounded p-5">
+            <h3 class="text-muted">Nothing to display!</h3>
+        </div>
+        <?php else: ?>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -26,6 +31,7 @@
                             <th>Youtube Video</th>
                             <th>Date Posted</th>
                             <th>Updated Post date</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tfoot>
@@ -36,10 +42,11 @@
                             <th>Youtube Video</th>
                             <th>Date Posted</th>
                             <th>Updated Post date</th>
+                            <th></th>
                         </tr>
                     </tfoot>
                     <tbody>
-                        <?php foreach($destination = Destination::action()->get_all() as $d): 
+                        <?php foreach($destination = Destination::action()->get_all("destination") as $d): 
                                     $address = $d->purok . " " . $d->barangay . " " . $d->city_mun;
                                     $category = Category::action()->get_by_id_category($d->cat_id);
                                 ?>
@@ -48,16 +55,22 @@
                             <td><?=$category[0]->name;?></td>
                             <td><?=$address;?></td>
                             <td class="text-center"><a class="text-center text-danger"
-                                    href="https://www.youtube.com/watch?v=<?=$d->youtube_url;?>" target="_blank"><i
-                                        class="fab fa-brands fa-youtube fa-2x"></i></a></td>
+                                    href="https://www.youtube.com/watch?v=<?=isYoutubeVideoLink($d->youtube_url);?>"
+                                    target="_blank"><i class="fab fa-brands fa-youtube fa-2x"></i></a></td>
                             <td><?=format_date($d->date_posted);?></td>
                             <td><?=format_date($d->date_update);?></td>
+                            <td class="d-flex "><a class="btn btn-sm btn-dark"
+                                    href="addtourspot.php?update=<?=$d->id;?>">UPDATE</a><span
+                                    style="margin: 0 10px;"></span><a class="btn btn-sm btn-danger" href="">DELETE</a>
+                            </td>
                         </tr>
-                        <?php endforeach; ?>
+                        <?php endforeach; 
+                        ?>
                     </tbody>
                 </table>
             </div>
         </div>
+        <?php endif; ?>
     </div>
 </div>
 <!-- /.container-fluid -->
