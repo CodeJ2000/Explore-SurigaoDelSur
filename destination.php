@@ -36,12 +36,11 @@
             <?php foreach($data = Destination::action()->get_all("destination") as $d): 
                     $cat_id = $d->cat_id;
                     $category = Category::action()->get_by_id_category($cat_id);
-                    $gallery = Gallery::action()->get_by_touristId_gallery($d->id);                
                 ?>
             <div class="col-lg-4 col-md-6 wow" data-wow-delay="0.1s">
                 <div class="package-item">
                     <div class="overflow-hidden card-img">
-                        <img class="img-fluid" src="img/tourist-spot/<?=$gallery[0]->image1;?>" alt="" />
+                        <img class="img-fluid" src="img/tourist-spot/<?=$d->image1;?>" alt="" />
                     </div>
                     <div class="d-flex border-bottom">
                         <small class="flex-fill text-center border-end py-2"><i

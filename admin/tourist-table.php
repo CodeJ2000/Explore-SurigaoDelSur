@@ -2,6 +2,12 @@
   require_once "../config/init.php";
   include "admin-partials/side-nav.php";
   include "admin-partials/topbar.php";
+    if(isset($_GET['delete'])){
+        $delete_id = sanitize_input($_GET['delete']);
+        $sd['soft_delete'] = 1;
+        Destination::action()->soft_delete($sd,$delete_id);
+        $_SESSION['success_message'] = "Successfuly deleted";
+    }
 ?>
 <!-- Begin Page Content -->
 <div class="container-fluid">
@@ -46,7 +52,7 @@
                         </tr>
                     </tfoot>
                     <tbody>
-                        <?php foreach($destination = Destination::action()->get_all("destination") as $d): 
+                        <?php foreach($destination = Destination::action()->get_by_deleteId_destination(0) as $d): 
                                     $address = $d->purok . " " . $d->barangay . " " . $d->city_mun;
                                     $category = Category::action()->get_by_id_category($d->cat_id);
                                 ?>
@@ -61,7 +67,8 @@
                             <td><?=format_date($d->date_update);?></td>
                             <td class="d-flex "><a class="btn btn-sm btn-dark"
                                     href="addtourspot.php?update=<?=$d->id;?>">UPDATE</a><span
-                                    style="margin: 0 10px;"></span><a class="btn btn-sm btn-danger" href="">DELETE</a>
+                                    style="margin: 0 10px;"></span><a class="btn btn-sm btn-danger"
+                                    href="tourist-table.php?delete=<?=$d->id?>">DELETE</a>
                             </td>
                         </tr>
                         <?php endforeach; 

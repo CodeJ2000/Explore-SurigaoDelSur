@@ -127,25 +127,21 @@ $data = Destination::action()->get_by_id_destination($_GET['id']);
                     <div class="row g-3">
                         <div class="col-lg-7 col-md-6">
                             <div class="row g-3">
-                                <?php $gallery = Gallery::action()->get_by_touristId_gallery($data[0]->id);?>
                                 <div class="col-lg-12 col-md-12 wow zoomIn" data-wow-delay="0.1s">
                                     <div class="position-relative d-block overflow-hidden" href="">
-                                        <img class="img-fluid" src="img/tourist-spot/<?=$gallery[0]->image1;?>"
-                                            alt="" />
+                                        <img class="img-fluid" src="img/tourist-spot/<?=$data[0]->image1;?>" alt="" />
 
 
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-md-12 wow zoomIn" data-wow-delay="0.3s">
                                     <div class="position-relative d-block overflow-hidden" href="">
-                                        <img class="img-fluid" src="img/tourist-spot/<?=$gallery[0]->image2;?>"
-                                            alt="" />
+                                        <img class="img-fluid" src="img/tourist-spot/<?=$data[0]->image2;?>" alt="" />
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-md-12 wow zoomIn" data-wow-delay="0.5s">
                                     <div class="position-relative d-block overflow-hidden" href="">
-                                        <img class="img-fluid" src="img/tourist-spot/<?=$gallery[0]->image3;?>"
-                                            alt="" />
+                                        <img class="img-fluid" src="img/tourist-spot/<?=$data[0]->image3;?>" alt="" />
 
                                     </div>
                                 </div>
@@ -154,7 +150,7 @@ $data = Destination::action()->get_by_id_destination($_GET['id']);
                         <div class="col-lg-5 col-md-6 wow zoomIn" data-wow-delay="0.7s" style="min-height: 350px">
                             <div class="position-relative d-block h-100 overflow-hidden" href="">
                                 <img class="img-fluid position-absolute w-100 h-100"
-                                    src="img/tourist-spot/<?=$gallery[0]->image4;?>" alt="" style="object-fit: cover" />
+                                    src="img/tourist-spot/<?=$data[0]->image4;?>" alt="" style="object-fit: cover" />
                             </div>
                         </div>
                     </div>

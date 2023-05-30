@@ -2,6 +2,8 @@
   require_once "../config/init.php";
   include "admin-partials/side-nav.php";
   include "admin-partials/topbar.php";
+  $arr['name'] = "jason";
+    DB::table("destination")->update($arr)->where("id = :id", ["id" => 1]);
 ?>
 
 <!-- Begin Page Content -->

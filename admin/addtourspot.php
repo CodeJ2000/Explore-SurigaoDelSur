@@ -9,12 +9,13 @@ if(isset($_GET['update'])){
     $update_id = sanitize_input($_GET['update']);
     $get_data = Destination::action()->get_by_id_destination($update_id);
     $get_cat = Destination::action()->get_by_id_category($get_data[0]->cat_id);
+    
     if(!empty($get_data)){
         $touristspot_name = $get_data[0]->name;
         $description = $get_data[0]->description;
         $purok = $get_data[0]->purok;
         $guides = $get_data[0]->guides;
-        $category = $get_cat[0]->name;
+        $category_id = $get_cat[0]->id;
         $barangay = $get_data[0]->barangay;
         $city_mun = $get_data[0]->city_mun;
         $yt_link = $get_data[0]->youtube_url;
@@ -25,34 +26,20 @@ if(isset($_GET['update'])){
   $description = $_POST['description'] ?? ""; 
   $purok = $_POST['purok'] ?? ""; 
   $guides = $_POST['guides'] ?? "";
-  $category = $_POST['category'] ?? ""; 
+  $category_id = $_POST['category'] ?? ""; 
   $barangay = $_POST['barangay'] ?? ""; 
   $city_mun = $_POST['city_mun'] ?? "";
   $yt_link = $_POST['yt_link'] ?? "";
-  $check = true;
 }
 
   //Check if the $_POST is more than 0.
-  if($_POST > 0){
-      //insert the data into the databse table destination if not success it will return the $errors array for error messag.e
-      $errors = Destination::action()->create($_POST);
-      //check if $errors is not returning an array, if so ,store the array data into the session call destination_id
-      if(!is_array($errors)){
-          $_SESSION['destination_id'] = $errors;
-       } else {
-        //if the $errors is returning an array then change the value of the $check into false
-        $check = false;
-       }
-        //Insert the files data  into the database table gallery and pass the variable $check = true or false, for preventing the inserting process if the $errors will return an array error messages.
-        $errors2 = Gallery::action()->create($check);
-        //Check if $errors and $errors2 is not an array and $errors is not equal to false.
-      if(!is_array($errors)  && $errors !== false && !is_array($errors2)){
-        //Make a session success message for showing a message success.
-          $_SESSION['success_message'] = "Destination Successfully added";
-          //redirect to tourist-table page.
-        header("Location: tourist-table.php");
-        exit;
-     }
+  if($_SERVER['REQUEST_METHOD'] === "POST"){
+    if(isset($_GET['update'])){
+        $errors = Destination::action()->update_destination($_POST, $update_id);
+    } else {
+        //insert the data into the database table destination if not success it will return the $errors array for error message.
+          $errors = Destination::action()->create($_POST);
+    }
   }
  ob_end_flush();
 ?>
@@ -67,10 +54,6 @@ if(isset($_GET['update'])){
     </div>
     <div>
         <?php
-                //Check if $errors2 is set and it is an array, then if its true merger the arrays $errors and $errors2.
-                if( isset($errors2) && is_array($errors2)){
-                    $errors = array_merge($errors, $errors2);
-                }
                 //Check if $errors is set and if its an array, then if is true, echo the error message.
                 if(isset($errors) && is_array($errors) && !empty($errors)){
                     err_message($errors);
@@ -79,7 +62,8 @@ if(isset($_GET['update'])){
     </div>
     <div class="row justify-content-center">
         <div class="col-lg-9 shadow p-4 rounded mb-2">
-            <form class="g-3" method="POST" enctype="multipart/form-data">
+            <form class="g-3" action="addtourspot.php<?=((isset($_GET['update'])) ? "?update=". $_GET['update']: "");?>"
+                method="POST" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-md-4">
                         <label for="validationDefault01" class="form-label">Title</label>
@@ -135,18 +119,18 @@ if(isset($_GET['update'])){
                 <?php if(isset($_GET['update'])): ?>
                 <div class="row">
                     <div class="col-md-3 p-2">
-                        <img style="width:100%;" src="../img/tourist-spot/<?=$gallery[0]->image1;?>" alt="">
+                        <img style="width:100%;" src="../img/tourist-spot/<?=$get_data[0]->image1;?>" alt="">
                     </div>
                     <div class="col-md-3 p-2">
-                        <img style="width:100%;" src="../img/tourist-spot/<?=$gallery[0]->image1;?>" alt="">
+                        <img style="width:100%;" src="../img/tourist-spot/<?=$get_data[0]->image2;?>" alt="">
 
                     </div>
                     <div class="col-md-3 p-2">
-                        <img style="width:100%;" src="../img/tourist-spot/<?=$gallery[0]->image1;?>" alt="">
+                        <img style="width:100%;" src="../img/tourist-spot/<?=$get_data[0]->image3;?>" alt="">
 
                     </div>
                     <div class="col-md-3 p-2">
-                        <img style="width:100%;" src="../img/tourist-spot/<?=$gallery[0]->image1;?>" alt="">
+                        <img style="width:100%;" src="../img/tourist-spot/<?=$get_data[0]->image4;?>" alt="">
                     </div>
                 </div>
                 <?php endif; ?>
@@ -161,8 +145,7 @@ if(isset($_GET['update'])){
                         <select name="category" class="form-control form-select" id="validationDefault04">
                             <option <?=((empty($category_id)) ? 'selected' : '');?> value="">Choose...</option>
                             <?php foreach($cat = Category::action()->select()->all() as $c): ?>
-                            <option <?=((isset($_GET['update']) && $category_id == $c->id)? 'selected' : '');?>
-                                value="<?=$c->id;?>">
+                            <option <?=(($category_id == $c->id)? 'selected' : '');?> value="<?=$c->id;?>">
                                 <?=$c->name;?>
                             </option>
                             <?php endforeach; ?>
